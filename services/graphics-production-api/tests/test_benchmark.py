@@ -1,9 +1,11 @@
 import json
 from pathlib import Path
 
+import pytest
 from graphics_production.scripts.benchmark import run_benchmark
 
 
+@pytest.mark.browser
 def test_batch_30_benchmark_has_zero_model_calls_and_complete_outputs(tmp_path: Path) -> None:
     fixture = Path(__file__).parent / "fixtures" / "batch_30.json"
 

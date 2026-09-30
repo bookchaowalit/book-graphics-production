@@ -23,6 +23,7 @@ def test_render_svg_is_editable_and_escaped() -> None:
     assert "https://" not in svg
 
 
+@pytest.mark.browser
 def test_render_png_has_canvas_dimensions() -> None:
     ir = compile_template(request_for("announcement", variant="portrait"))
 
