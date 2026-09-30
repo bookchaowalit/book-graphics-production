@@ -2,10 +2,10 @@
 
 ## Current state
 
-Score: 6/10 (was 5/10) — small, typed and well-tested template renderer, but
-it is an older fork of the graphics module that `book-production-platform`
-now owns (recipe `template-batch-v2` here vs `v3` there, no print export), and
-fixes must currently be made twice.
+Score: 6.5/10 (was 6/10 after pass 1, 5/10 before) — small, typed and
+well-tested template renderer; ownership is now decided (the platform owns
+graphics, this is a frozen fork), but safety fixes still have to be mirrored
+until it is archived.
 
 ## Backlog
 
@@ -13,24 +13,21 @@ fixes must currently be made twice.
 
 - Confirm the first GitHub Actions run is green, especially the PNG tests that
   use the runner's preinstalled Google Chrome.
-- Decide ownership: either make this repository the single owner and have the
-  platform depend on it, or archive it in favour of
-  `book-production-platform/src/book_production_platform/graphics_production`.
+- Archive this repository once no workflow uses it (the platform's
+  `scripts/graphics_fork_parity.py` already shows nothing exists only here).
+  Until then mirror only safety fixes, not features.
 
 ### P1
 
-- Batches write `<request_id>.svg/.png` straight into the shared output
-  directory, so a later batch (different idempotency key) with the same
-  `request_id` overwrites files an earlier manifest still hashes. Scope
-  artifacts per batch or refuse to overwrite differing bytes.
-- `run_batch` calls `raw.get(...)` on every item, so a non-object item in the
-  batch raises `AttributeError` instead of an item-level rejection.
+- Features missing vs the platform (Thai cluster-aware wrapping in `layout.py`,
+  announcement layout for portrait/story, print export): do not port; point
+  users at the platform instead.
 
 ### P2
 
 - Replace `httpx`-backed `fastapi.testclient` usage before Starlette drops it.
 
-## Done in this pass
+## Done in pass 1
 
 - Fixed: two items whose `request_id`s sanitize to the same file name
   (duplicates, case variants, stripped punctuation) overwrote each other's
@@ -41,3 +38,14 @@ fixes must currently be made twice.
   browser-free naming tests.
 - Added `.github/workflows/ci.yml` running `scripts/check.py` on Python 3.11
   and 3.12, and ignored generated `*.egg-info/`.
+
+## Done in this pass (pass 2)
+
+- Fixed (mirrored from the platform): a later batch with the same
+  `request_id` silently overwrote SVG/PNG files an earlier manifest still
+  hashes; such items are now rejected with
+  `artifact_exists_with_different_content` (identical bytes are reused).
+- Fixed: a non-object batch item raised `AttributeError` for the whole batch;
+  it is now an item-level `invalid_request` rejection.
+- Ownership decided and documented in the README: `book-production-platform`
+  owns graphics; this repository is a frozen fork pending archive.

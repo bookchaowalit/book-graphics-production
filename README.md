@@ -1,5 +1,12 @@
 # Book Graphics Production
 
+> **Ownership:** graphics production is owned by
+> `book-production-platform` (`src/book_production_platform/graphics_production`
+> and `graphics_ir`). This repository is a frozen fork kept until it is
+> archived: safety fixes are mirrored here, new features are not. Run
+> `python scripts/graphics_fork_parity.py --fork ..\book-graphics-production`
+> in the platform repository to see which modules have drifted.
+
 Book Graphics Production is a local-first tool for turning validated JSON
 requests into editable SVG artwork and PNG previews. Its V1A templates are
 `quote_card`, `product_card`, and `announcement`, each with square, portrait,
@@ -34,6 +41,12 @@ Outputs include editable SVG, PNG preview, QA results, and a replay-safe
 manifest. Set `GRAPHICS_PRODUCTION_BROWSER` to choose a non-default Edge or
 Chrome executable; `GRAPHICS_PRODUCTION_BROWSER_PROFILE` can relocate the
 isolated local browser profile.
+
+Artifacts are named after each item's `request_id` inside the output
+directory. A later batch that would replace one of those files with different
+bytes is rejected per item with `artifact_exists_with_different_content`, so an
+earlier manifest's hashes stay valid; use a new output directory or
+`request_id` for a changed render.
 
 Run the 30-output synthetic benchmark:
 
