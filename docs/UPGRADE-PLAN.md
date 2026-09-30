@@ -20,8 +20,8 @@ until it is archived.
 ### P1
 
 - Features missing vs the platform (Thai cluster-aware wrapping in `layout.py`,
-  announcement layout for portrait/story, print export): do not port; point
-  users at the platform instead.
+  announcement layout for portrait/story, print export, per-batch artifact
+  folders): do not port; point users at the platform instead.
 
 ### P2
 
@@ -49,3 +49,13 @@ until it is archived.
   it is now an item-level `invalid_request` rejection.
 - Ownership decided and documented in the README: `book-production-platform`
   owns graphics; this repository is a frozen fork pending archive.
+
+## Done in this pass (pass 3)
+
+- Per-batch artifact folders (`<output>/<batch_id>/`, so a later batch whose
+  PNG bytes differ is no longer rejected with
+  `artifact_exists_with_different_content`) landed in the owner,
+  `book-production-platform`. Deliberately not mirrored here: this fork's
+  behaviour already fails closed (no data loss), and a manifest layout change
+  is a feature, which this frozen fork does not take. The README now
+  documents the limitation and points at the platform.

@@ -46,7 +46,10 @@ Artifacts are named after each item's `request_id` inside the output
 directory. A later batch that would replace one of those files with different
 bytes is rejected per item with `artifact_exists_with_different_content`, so an
 earlier manifest's hashes stay valid; use a new output directory or
-`request_id` for a changed render.
+`request_id` for a changed render. Because browser PNG bytes can differ run to
+run, reusing a `request_id` across batches may be rejected here even for the
+same input; `book-production-platform` (the owner) avoids this with per-batch
+artifact folders.
 
 Run the 30-output synthetic benchmark:
 
