@@ -59,3 +59,12 @@ until it is archived.
   behaviour already fails closed (no data loss), and a manifest layout change
   is a feature, which this frozen fork does not take. The README now
   documents the limitation and points at the platform.
+
+## Done in this pass (pass 4: edge-case bug hunt)
+
+- Safety fix mirrored from the platform: artifact names derived from request
+  ids `CON`, `nul`, `COM1`, `lpt9.card`... are Windows device names (writing
+  `NUL.svg` silently discards the bytes, so the manifest hash cannot match);
+  they now get a `_` prefix. Regression tests added. The platform's Thai
+  following-vowel wrap fix is a feature here (no cluster wrapping) and was
+  not ported.
