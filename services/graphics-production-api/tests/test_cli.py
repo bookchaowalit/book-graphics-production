@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
 
+import pytest
 from graphics_production.cli import main
 from test_jobs import item
 
 
+@pytest.mark.browser
 def test_cli_batch_prints_json_summary(tmp_path: Path, capsys: object) -> None:
     input_path = tmp_path / "batch.json"
     input_path.write_text(json.dumps({"items": [item()]}, ensure_ascii=False), encoding="utf-8")

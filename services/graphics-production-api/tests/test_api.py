@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 from graphics_production.main import app
 
@@ -28,6 +29,7 @@ def test_health_exposes_graphics_contract() -> None:
     assert response.json()["model_calls_supported"] is False
 
 
+@pytest.mark.browser
 def test_create_batch_returns_artifact_manifest(tmp_path: Path, monkeypatch: object) -> None:
     monkeypatch.setenv("GRAPHICS_PRODUCTION_OUTPUT_ROOT", str(tmp_path))  # type: ignore[attr-defined]
     client = TestClient(app)

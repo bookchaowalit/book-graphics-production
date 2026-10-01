@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # Runs `python scripts/check.py`: pytest for both packages, Ruff and strict
+    # mypy. PNG rendering tests use the runner's preinstalled Google Chrome and
+    # skip with a reason on hosts without a Chromium-family browser.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install packages
+        run: |
+          python -m pip install -e ./packages/graphics-production-ir
+          python -m pip install -e "./services/graphics-production-api[dev]"
+
+      - name: Run checks
+        run: python scripts/check.py

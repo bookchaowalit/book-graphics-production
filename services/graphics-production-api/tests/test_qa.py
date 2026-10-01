@@ -1,9 +1,11 @@
+import pytest
 from graphics_production.qa import run_graphic_qa
 from graphics_production.render import render_png, render_svg
 from graphics_production.templates import compile_template
 from test_templates import request_for
 
 
+@pytest.mark.browser
 def test_graphic_qa_accepts_valid_svg_and_png() -> None:
     ir = compile_template(request_for("announcement"))
 
@@ -12,6 +14,7 @@ def test_graphic_qa_accepts_valid_svg_and_png() -> None:
     assert issues == ()
 
 
+@pytest.mark.browser
 def test_graphic_qa_rejects_external_reference() -> None:
     ir = compile_template(request_for("announcement"))
     svg = render_svg(ir).replace(
